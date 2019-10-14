@@ -1,141 +1,146 @@
+import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import java.io.*;
-import java.net.URL;
 import java.util.*;
-
-import org.jsoup.Jsoup;
 
 /**
  * 
- * This program is a text analyzer that reads a text file and outputs the word
- * frequencies of all words in the file, sorted by the most frequently used
- * word. The output is a set of pairs, each pair containing a word and how many
- * times it occurred in the file.
+ * This program is a text analyzer that reads a html URL that the user inputs
+ * and outputs the word frequencies of all words in the file, sorted by the most
+ * frequently used word. The output is displayed in a JavaFX UI table with each
+ * pair containing a word and how many times it occurred in the file.
  * 
  * @author Juan Martinez
  *
  */
 
-public class WordFrequencyTest {
+public class WordFrequencyTest extends Application {
+
+	Stage window;
+	Button button;
+	TableView<Word> table;
+	String url = "";
+	public LinkedHashMap<String, Integer> importedList = new LinkedHashMap<>();
 
 	/**
-	 * This method extracts the text from a locally saved HTML file or from an URL
-	 * based HTML file and returns the text from the file without any HTML tags.
-	 * 
-	 * @param file name and direction of the file or URL
-	 * @return extracted text of the file
-	 * @throws IOException if there is a problem in the input of the file.
-	 */
-
-	public static String extractText(String file) throws IOException {
-		/**
-		 * If you want to read from a file directly instead of a URL uncomment the
-		 * FileReader line and comment out the URL line. Also switch the BufferedReader
-		 * line for the one that is commented out and uncomment the br.close() line.
-		 **/
-		// FileReader reader = new FileReader(file);
-		URL reader = new URL(file);
-		StringBuilder sb = new StringBuilder();
-		// BufferedReader br = new BufferedReader(reader);
-		BufferedReader br = new BufferedReader(new InputStreamReader(reader.openStream()));
-		String line;
-		while ((line = br.readLine()) != null) {
-			sb.append(line);
-		}
-		String text = Jsoup.parse(sb.toString()).text();
-		// br.close();
-		return text;
-	}
-
-	/**
-	 * This method receives a String and a Map collection and gets the words of the
-	 * String and puts them in the collection word per word with the value of 1. If
-	 * a word that is obtained from the document is already in the collection, then
-	 * we sum 1 to the value of that word.
-	 * 
-	 * @param str   String whose words are counted and put in the collection.
-	 * @param words collection
-	 * @throws FileNotFoundException if the text file is not found.
-	 */
-
-	public static void wordFrequency(String str, Map<String, Integer> words) throws FileNotFoundException {
-
-		String arr[] = str.replaceAll("[^a-zA-Z '-]", "").toUpperCase().split("\\s+");
-		for (String s : arr) {
-			int count = 0;
-			if (words.containsKey(s)) {
-				count = words.get(s);
-			}
-			words.put(s, count + 1);
-		}
-
-	}
-
-	/**
-	 * This method sorts the values in the collection from lowest to highest entry
-	 * by comparing each value and then putting them in a new collection.
-	 * 
-	 * @param words collection
-	 * @return newList collection that will be passed into a variable in the main
-	 *         method.
-	 */
-
-	public static HashMap<String, Integer> sortByValue(HashMap<String, Integer> words) {
-		List<Map.Entry<String, Integer>> list = new LinkedList<Map.Entry<String, Integer>>(words.entrySet());
-
-		Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
-			public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
-				return (o1.getValue()).compareTo(o2.getValue());
-			}
-		});
-
-		HashMap<String, Integer> newList = new LinkedHashMap<String, Integer>();
-		for (Map.Entry<String, Integer> aa : list) {
-			newList.put(aa.getKey(), aa.getValue());
-		}
-		return newList;
-	}
-
-	/**
-	 * Main method in which we create the first collection and specify the document
-	 * or URL where the text will be that is going to be analyzed. We call all three
-	 * methods and create reverseSortedMap which is a LinkedHashMap that is filled
-	 * with the documents words but now with the highest values displayed first.
+	 * Main method in which we launch the UI and thus the rest of the processes go
+	 * into action.
 	 * 
 	 * @param args an array of command-line arguments for the application.
 	 * @throws IOException if there is a problem in the input of the file.
 	 */
 
 	public static void main(String[] args) throws IOException {
-		HashMap<String, Integer> words = new HashMap<String, Integer>();
-		String document = "http://shakespeare.mit.edu/macbeth/full.html";
+		launch(args);
 
-		String play = WordFrequencyTest.extractText(document);
+	}
 
-		wordFrequency(play, words);
+	/**
+	 * Method that is called by the main method in order to create the UI for the
+	 * program. Here we set the elements of the UI including labels, texts, text
+	 * boxes and tables.
+	 * 
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public void start(Stage primaryStage) throws Exception {
+		window = primaryStage;
+		window.setTitle("Word Frequencies");
 
-		Map<String, Integer> sortedList = sortByValue(words);
+		Label instructionsLabel = new Label("Input the URL of the HTML file you want the word frequencies for.");
 
-		LinkedHashMap<String, Integer> reverseSortedMap = new LinkedHashMap<>();
-		sortedList.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-				.forEachOrdered(x -> reverseSortedMap.put(x.getKey(), x.getValue()));
+		Label urlLabel = new Label("URL:");
 
-		// Print to text document
+		TextField urlInput = new TextField();
+		urlInput.setPrefWidth(600);
+
+		button = new Button();
+		button.setText("Obtain word frequencies");
+		button.setOnAction(e -> {
+			try {
+				url = urlInput.getText();
+				if (url.isEmpty()) {
+					AlertBox.display("Invalid URL", "Please input a valid HTML URL");
+				} else {
+					table.setItems(getWord(url));
+				}
+			} catch (IOException e1) {
+				e1.printStackTrace();
+				AlertBox.display("Invalid URL", "Please input a valid HTML URL");
+			}
+		});
+
+		// Order column
+		TableColumn<Word, Integer> orderColumn = new TableColumn<>("Order");
+		orderColumn.setMinWidth(200);
+		orderColumn.setCellValueFactory(new PropertyValueFactory<>("order"));
+
+		// Word column
+		TableColumn<Word, String> wordColumn = new TableColumn<>("Word");
+		wordColumn.setMinWidth(300);
+		wordColumn.setCellValueFactory(new PropertyValueFactory<>("word"));
+
+		// Frequency column
+		TableColumn<Word, Integer> frequencyColumn = new TableColumn<>("Frequency");
+		frequencyColumn.setMinWidth(200);
+		frequencyColumn.setCellValueFactory(new PropertyValueFactory<>("frequency"));
+
+		table = new TableView<>();
+		table.getColumns().addAll(orderColumn, wordColumn, frequencyColumn);
+		table.prefHeightProperty().bind(window.heightProperty());
+		table.prefWidthProperty().bind(window.widthProperty());
+
+		HBox hBox = new HBox();
+		hBox.getChildren().addAll(urlLabel, urlInput);
+		hBox.setSpacing(20);
+		hBox.setAlignment(Pos.CENTER);
+
+		VBox vBox = new VBox();
+		vBox.getChildren().addAll(instructionsLabel, hBox, button, table);
+		vBox.setPadding(new Insets(10, 50, 50, 50));
+		vBox.setSpacing(10);
+		vBox.setAlignment(Pos.CENTER);
+
+		Scene scene = new Scene(vBox);
+		window.setScene(scene);
+		window.setHeight(850);
+		window.setWidth(815);
+		window.show();
+	}
+
+	/**
+	 * This method gets the list of words from the WordFrequencyFinder class and
+	 * adds it to the observable list that will be displayed in the UI.
+	 * 
+	 * @param urlLink HTML URL link inputed by the user which the program will
+	 *                analyze.
+	 * @return words Observable list that will be displayed in the UI
+	 * @throws IOException if there is a problem with the URL link
+	 */
+	public ObservableList<Word> getWord(String urlLink) throws IOException {
+		ObservableList<Word> words = FXCollections.observableArrayList();
+		WordFrequencyFinder finder1 = new WordFrequencyFinder(urlLink);
+		importedList = finder1.getWordList();
 		int count = 1;
-		PrintStream o = new PrintStream(new File("Output.txt"));
-		PrintStream console = System.out;
-		System.setOut(o);
-		for (Map.Entry<String, Integer> en : reverseSortedMap.entrySet()) {
-			System.out.println(count + ". (" + en.getKey() + ", " + en.getValue() + ")");
+		for (Map.Entry<String, Integer> en : importedList.entrySet()) {
+			words.add(new Word(count, en.getKey(), en.getValue()));
 			count++;
 		}
 
-		// Print to console
-		count = 1;
-		System.setOut(console);
-		for (Map.Entry<String, Integer> en : reverseSortedMap.entrySet()) {
-			System.out.println(count + ". (" + en.getKey() + ", " + en.getValue() + ")");
-			count++;
-		}
+		return words;
 	}
 
 }
