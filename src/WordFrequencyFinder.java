@@ -99,10 +99,9 @@ public class WordFrequencyFinder {
 	 * methods and create reverseSortedMap which is a LinkedHashMap that is filled
 	 * with the documents words but now with the highest values displayed first.
 	 * 
-	 * @param args an array of command-line arguments for the application.
+	 * @param url of the HTML file that we are going to use.
 	 * @throws IOException if there is a problem in the input of the file.
 	 */
-
 	public WordFrequencyFinder(String url) throws IOException {
 		HashMap<String, Integer> words = new HashMap<String, Integer>();
 //		String document = "http://shakespeare.mit.edu/macbeth/full.html";

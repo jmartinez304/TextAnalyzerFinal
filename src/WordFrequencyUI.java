@@ -27,13 +27,13 @@ import java.util.*;
  *
  */
 
-public class WordFrequencyTest extends Application {
+public class WordFrequencyUI extends Application {
 
 	Stage window;
 	Button button;
 	TableView<Word> table;
 	String url = "";
-	public LinkedHashMap<String, Integer> importedList = new LinkedHashMap<>();
+	public static LinkedHashMap<String, Integer> importedList = new LinkedHashMap<>();
 
 	/**
 	 * Main method in which we launch the UI and thus the rest of the processes go
@@ -130,7 +130,7 @@ public class WordFrequencyTest extends Application {
 	 * @return words Observable list that will be displayed in the UI
 	 * @throws IOException if there is a problem with the URL link
 	 */
-	public ObservableList<Word> getWord(String urlLink) throws IOException {
+	public static ObservableList<Word> getWord(String urlLink) throws IOException {
 		ObservableList<Word> words = FXCollections.observableArrayList();
 		WordFrequencyFinder finder1 = new WordFrequencyFinder(urlLink);
 		importedList = finder1.getWordList();
