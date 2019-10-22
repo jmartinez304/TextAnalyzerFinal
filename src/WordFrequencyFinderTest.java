@@ -27,7 +27,7 @@ public class WordFrequencyFinderTest {
 	 */
 	public void test1() throws IOException {
 		assertEquals("Hello world! Hello World!", WordFrequencyFinder.extractText(
-				"https://gist.githubusercontent.com/kegg/11360281/raw/fe85e3aacdc3f3ee7f5cff4a189c301255d4cce9/HelloWorld.htm"));
+				"https://gist.githubusercontent.com/jmartinez304/39cdab4d14ab4c435ee79af7cfd2c2fe/raw/8107dea2e96602f279d8d3ab1c18ea1dfc2dc3e6/helloWorld.html"));
 
 	}
 
