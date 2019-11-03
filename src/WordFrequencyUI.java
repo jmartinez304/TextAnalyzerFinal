@@ -18,7 +18,7 @@ import java.util.*;
 
 /**
  * 
- * This program is a text analyzer that reads a html URL that the user inputs
+ * This program is a text analyzer that reads an HTML URL that the user inputs
  * and outputs the word frequencies of all words in the file, sorted by the most
  * frequently used word. The output is displayed in a JavaFX UI table with each
  * pair containing a word and how many times it occurred in the file.
@@ -36,11 +36,11 @@ public class WordFrequencyUI extends Application {
 	public static LinkedHashMap<String, Integer> importedList = new LinkedHashMap<>();
 
 	/**
-	 * Main method in which we launch the UI and thus the rest of the processes go
-	 * into action.
+	 * The main method in which we launch the UI and thus the rest of the processes
+	 * go into action.
 	 * 
-	 * @param args an array of command-line arguments for the application.
-	 * @throws IOException if there is a problem in the input of the file.
+	 * @param args an array of command-line arguments for the application
+	 * @throws IOException if there is a problem in the input of the file
 	 */
 
 	public static void main(String[] args) throws IOException {
@@ -49,9 +49,9 @@ public class WordFrequencyUI extends Application {
 	}
 
 	/**
-	 * Method that is called by the main method in order to create the UI for the
-	 * program. Here we set the elements of the UI including labels, texts, text
-	 * boxes and tables.
+	 * Method that is called by the main method to create the UI for the program.
+	 * Here we set the elements of the UI including labels, texts, text boxes, and
+	 * tables.
 	 * 
 	 */
 	@SuppressWarnings("unchecked")
@@ -125,10 +125,9 @@ public class WordFrequencyUI extends Application {
 	 * This method gets the list of words from the WordFrequencyFinder class and
 	 * adds it to the observable list that will be displayed in the UI.
 	 * 
-	 * @param urlLink HTML URL link inputed by the user which the program will
-	 *                analyze.
+	 * @param urlLink HTML URL inputed by the user which the program will analyze.
 	 * @return words Observable list that will be displayed in the UI
-	 * @throws IOException if there is a problem with the URL link
+	 * @throws IOException if there is a problem with the URL
 	 */
 	public static ObservableList<Word> getWord(String urlLink) throws IOException {
 		ObservableList<Word> words = FXCollections.observableArrayList();

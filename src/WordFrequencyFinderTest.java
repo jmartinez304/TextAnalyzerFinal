@@ -20,10 +20,10 @@ public class WordFrequencyFinderTest {
 	@Test
 	/**
 	 * This test involves testing the extractText method. This test has the text of
-	 * an HTML file and verifies that the extracted text using the method is the
+	 * the HTML file and verifies that the extracted text using the method is the
 	 * correct one.
 	 * 
-	 * @throws IOException if there is a problem in the input of the file.
+	 * @throws IOException if there is a problem with the URL
 	 */
 	public void test1() throws IOException {
 		assertEquals("Hello world! Hello World!", WordFrequencyFinder.extractText(
@@ -33,12 +33,12 @@ public class WordFrequencyFinderTest {
 
 	@Test
 	/**
-	 * This test involves verifying the wordFrquency method. In this test we give
+	 * This test involves verifying the wordFrquency method. In this test, we give
 	 * this method a String and verify that it counts the frequency of the words in
 	 * the string by comparing it to a HashMap that has the correct words and
 	 * frequency values of each one.
 	 * 
-	 * @throws FileNotFoundException if the text file is not found.
+	 * @throws FileNotFoundException if the file is not found
 	 */
 	public void test2() throws FileNotFoundException {
 		HashMap<String, Integer> wordsTestVariable = new HashMap<String, Integer>();
@@ -58,10 +58,6 @@ public class WordFrequencyFinderTest {
 	 * are stored inside an ArrayList and we compare them one by one in a for loop.
 	 */
 	public void test3() {
-		/**
-		 * HashMap<String, Integer> newList = new LinkedHashMap<String, Integer>();
-		 * newList.put("MY", 7); newList.put("HELLO", 2); newList.put("WORLD", 5);
-		 **/
 		int count = 0;
 		ArrayList<Integer> arrli = new ArrayList<Integer>();
 		arrli.add(2);
@@ -73,7 +69,6 @@ public class WordFrequencyFinderTest {
 		wordsTestVariable.put("WORLD", 5);
 		Map<String, Integer> sortedList = WordFrequencyFinder.sortByValue(wordsTestVariable);
 		for (Map.Entry<String, Integer> aa : sortedList.entrySet()) {
-//			System.out.println("Key: " + aa.getKey() + " Value: " + aa.getValue());
 			assertEquals((int) arrli.get(count), (int) aa.getValue());
 			count++;
 		}
@@ -84,11 +79,11 @@ public class WordFrequencyFinderTest {
 	/**
 	 * This test involves testing the method getWordList method and the
 	 * WordFrequencyFinder constructor method. Here we verify that the URL we sent
-	 * to the constructor constructed the correct list of entries and sorted them
-	 * and for this we use the getWordList class to obtain that list and compare
-	 * each entry of the list with an ArrayList that has the correct values.
+	 * to the constructor made the correct list of entries and sorted them and for
+	 * this, we use the getWordList class to obtain that list and compare each entry
+	 * of the list with an ArrayList that has the correct values.
 	 * 
-	 * @throws IOException if there is a problem in the input of the file.
+	 * @throws IOException if there is a problem with the URL
 	 */
 	public void test4() throws IOException {
 		int count = 0;

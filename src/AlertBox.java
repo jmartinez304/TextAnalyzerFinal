@@ -9,17 +9,16 @@ import javafx.stage.Stage;
 
 /**
  * 
- * This class was made to create an alert box for when users, so they don't
- * enter invalid URL's.
+ * Class that creates an alert box for users, so they don’t enter invalid URLs.
  *
  */
 public class AlertBox {
 
 	/**
-	 * Create an alert box for when users don't enter valid URL's
+	 * Method that creates an alert box for when users don’t enter a valid URL.
 	 * 
-	 * @param title   of the Window pop up
-	 * @param message of the pop up
+	 * @param title   of the window pop-up
+	 * @param message of the pop-up
 	 */
 
 	public static void display(String title, String message) {

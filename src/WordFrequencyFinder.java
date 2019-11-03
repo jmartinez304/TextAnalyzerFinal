@@ -5,9 +5,10 @@ import java.util.*;
 import org.jsoup.Jsoup;
 
 /**
- * This class reads the HTML text file and organizes the word frequencies of all
- * words in the file, sorted by the most frequently used word. It puts them all
- * into a Map to be sent for the WordFrequencyTest class
+ * This class reads the HTML text file from a URL link and organizes the word
+ * frequencies of all words in the file, sorted by the most frequently used
+ * word. It puts them all into a Map to which is sent for the WordFrequencyTest
+ * class.
  */
 
 public class WordFrequencyFinder {
@@ -15,19 +16,20 @@ public class WordFrequencyFinder {
 	public LinkedHashMap<String, Integer> finalList = new LinkedHashMap<>();
 
 	/**
-	 * This method extracts the text from the URL based HTML file and returns the
-	 * text from the file without any HTML tags.
+	 * This method extracts the text from the HTML file in the URL and returns the
+	 * text from the file with no HTML tags.
 	 * 
-	 * @param file name and direction of the file or URL
-	 * @return extracted text of the file
-	 * @throws IOException if there is a problem in the input of the file.
+	 * @param file URL address
+	 * @return text extracted from the file
+	 * @throws IOException if there is a problem with the URL
 	 */
 
 	public static String extractText(String file) throws IOException {
 		/**
-		 * If you want to read from a file directly instead of a URL uncomment the
-		 * FileReader line and comment out the URL line. Also switch the BufferedReader
-		 * line for the one that is commented out and uncomment the br.close() line.
+		 * If you want to read from a file directly instead of a URL, delete the comment
+		 * characters from the FileReader line and comment out the URL line. Also,
+		 * switch the BufferedReader line for the one that is commented out and delete
+		 * the comment characters from the br.close() line.
 		 **/
 
 		// FileReader reader = new FileReader(file);
@@ -50,9 +52,9 @@ public class WordFrequencyFinder {
 	 * a word that is obtained from the document is already in the collection, then
 	 * we sum 1 to the value of that word.
 	 * 
-	 * @param str   String whose words are counted and put in the collection.
-	 * @param words collection
-	 * @throws FileNotFoundException if the text file is not found.
+	 * @param str   String whose words are counted and put in the collection
+	 * @param words collection to store the words and the occurrences of it
+	 * @throws FileNotFoundException if the file is not found
 	 */
 
 	public static void wordFrequency(String str, Map<String, Integer> words) throws FileNotFoundException {
@@ -72,9 +74,9 @@ public class WordFrequencyFinder {
 	 * This method sorts the values in the collection from lowest to highest entry
 	 * by comparing each value and then putting them in a new collection.
 	 * 
-	 * @param words collection
-	 * @return newList collection that will be passed into a variable in the main
-	 *         method.
+	 * @param words collection to store the words and the occurrences of it
+	 * @return newList collection that will be passed into a variable in the
+	 *         constructor method
 	 */
 
 	public static HashMap<String, Integer> sortByValue(HashMap<String, Integer> words) {
@@ -94,13 +96,14 @@ public class WordFrequencyFinder {
 	}
 
 	/**
-	 * Method in which we create the first collection and specify the document or
-	 * URL where the text will be that is going to be analyzed. We call all three
-	 * methods and create reverseSortedMap which is a LinkedHashMap that is filled
-	 * with the documents words but now with the highest values displayed first.
+	 * Method in which we create the first collection and specify the URL from where
+	 * we extract the text that will be analyzed. This method makes use of the
+	 * methods in the class to create a reverseSortedMap which is a LinkedHashMap
+	 * that is filled with the words of the document but now with the highest values
+	 * displayed first.
 	 * 
-	 * @param url of the HTML file that we are going to use.
-	 * @throws IOException if there is a problem in the input of the file.
+	 * @param url of the HTML file that we are going to use
+	 * @throws IOException if there is a problem with the URL
 	 */
 	public WordFrequencyFinder(String url) throws IOException {
 		HashMap<String, Integer> words = new HashMap<String, Integer>();
@@ -139,9 +142,10 @@ public class WordFrequencyFinder {
 	}
 
 	/**
-	 * This method is used to send the word list to the WordFrequencyTest class
+	 * This method is used to send the word list to the WordFrequencyTest class.
 	 * 
-	 * @return sorted list with the frequency of words of the inputed file.
+	 * @return finalList sorted list with the frequency of words of the inputted
+	 *         file
 	 */
 	public LinkedHashMap<String, Integer> getWordList() {
 		return finalList;

@@ -2,7 +2,8 @@
 public class Word {
 
 	/**
-	 * Word class used for adding to the list of words to the ObservableList
+	 * Word class used for adding to the list of words to the ObservableList in the
+	 * WordFrequencyUI class.
 	 */
 	private int order;
 	private String word;
@@ -11,7 +12,7 @@ public class Word {
 	/**
 	 * Word class constructor method to store the characteristics of each word.
 	 * 
-	 * @param order     of frequency of the word
+	 * @param order     number of frequency of the word
 	 * @param word      that is being analyzed for frequency
 	 * @param frequency of the word
 	 */
@@ -27,7 +28,7 @@ public class Word {
 	/*
 	 * Getter method for the order variable
 	 * 
-	 * @return order of frequency of the word
+	 * @return order number of frequency of the word
 	 */
 	public int getOrder() {
 		return order;
@@ -36,7 +37,7 @@ public class Word {
 	/**
 	 * Setter method for the order variable
 	 * 
-	 * @param order of frequency of the word
+	 * @param order number of frequency of the word
 	 */
 	public void setOrder(int order) {
 		this.order = order;
@@ -45,7 +46,7 @@ public class Word {
 	/*
 	 * Getter method for the word variable
 	 * 
-	 * @return that is being analyzed for frequency
+	 * @return word that is being analyzed for frequency
 	 */
 	public String getWord() {
 		return word;

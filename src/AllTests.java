@@ -4,7 +4,7 @@ import org.junit.runners.Suite.SuiteClasses;
 
 /**
  * 
- * Testing Suite that includes all the tests classes of the
+ * Testing Suite class that includes all the unit test classes of the
  * TextAnalyzerWithUITest project.
  *
  */

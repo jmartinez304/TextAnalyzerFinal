@@ -2,6 +2,13 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+/**
+ * 
+ * This is a JUnit testing class for the Word class. Each test will verify each
+ * of the methods of that class.
+ *
+ */
+
 public class WordTest {
 
 	@Test
