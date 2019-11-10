@@ -2,9 +2,11 @@ import static org.junit.Assert.*;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.junit.Test;
@@ -77,15 +79,18 @@ public class WordFrequencyFinderTest {
 
 	@Test
 	/**
-	 * This test involves testing the method getWordList method and the
-	 * WordFrequencyFinder constructor method. Here we verify that the URL we sent
-	 * to the constructor made the correct list of entries and sorted them and for
-	 * this, we use the getWordList class to obtain that list and compare each entry
-	 * of the list with an ArrayList that has the correct values.
+	 * This test involves testing the method deleteAllRows method, the insertAllRows
+	 * method and the WordFrequencyFinder constructor method. Here we verify that
+	 * the URL we sent to the constructor made the correct list of entries and
+	 * sorted them and for this, we use the deleteAllRows method to delete all
+	 * leftover entries in the database and use the insertAllRows method to insert
+	 * all the entries into the database. Then we call the database to obtain that
+	 * words count and compare each entry of the list with an ArrayList that has the
+	 * correct values.
 	 * 
 	 * @throws IOException if there is a problem with the URL
 	 */
-	public void test4() throws IOException {
+	public void test4() throws Exception {
 		int count = 0;
 		ArrayList<Integer> arrli = new ArrayList<Integer>();
 		arrli.add(2);
@@ -93,11 +98,31 @@ public class WordFrequencyFinderTest {
 		arrli.add(1);
 		WordFrequencyFinder wordFinder = new WordFrequencyFinder(
 				"https://raw.githubusercontent.com/jmartinez304/myappsample/master/index.html");
-		LinkedHashMap<String, Integer> importedList = wordFinder.getWordList();
-		for (Map.Entry<String, Integer> en : importedList.entrySet()) {
-//			System.out.println("Key: " + en.getKey() + " Value: " + en.getValue());
-			assertEquals((int) arrli.get(count), (int) en.getValue());
-			count++;
+
+		Connection con = null;
+		PreparedStatement statement = null;
+		ResultSet result = null;
+
+		try {
+			con = DatabaseConnection.getConnection();
+			statement = con.prepareStatement("Select * FROM word");
+			result = statement.executeQuery();
+			while (result.next()) {
+				assertEquals((int) arrli.get(count), result.getInt("word_count"));
+				count++;
+			}
+		} catch (Exception e) {
+			System.out.println(e);
+		} finally {
+			if (result != null) {
+				result.close();
+			}
+			if (statement != null) {
+				statement.close();
+			}
+			if (con != null) {
+				con.close();
+			}
 		}
 	}
 

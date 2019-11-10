@@ -7,8 +7,8 @@ import org.jsoup.Jsoup;
 /**
  * This class reads the HTML text file from a URL link and organizes the word
  * frequencies of all words in the file, sorted by the most frequently used
- * word. It puts them all into a Map to which is sent for the WordFrequencyTest
- * class.
+ * word. It puts them all into a Map to which is then inserted the database.
+ * 
  */
 
 public class WordFrequencyFinder {
@@ -100,12 +100,12 @@ public class WordFrequencyFinder {
 	 * we extract the text that will be analyzed. This method makes use of the
 	 * methods in the class to create a reverseSortedMap which is a LinkedHashMap
 	 * that is filled with the words of the document but now with the highest values
-	 * displayed first.
+	 * displayed first. Then the words get inserted into the database.
 	 * 
 	 * @param url of the HTML file that we are going to use
-	 * @throws IOException if there is a problem with the URL
+	 * @throws Exception if there is a problem in a called method
 	 */
-	public WordFrequencyFinder(String url) throws IOException {
+	public WordFrequencyFinder(String url) throws Exception {
 		HashMap<String, Integer> words = new HashMap<String, Integer>();
 //		String document = "http://shakespeare.mit.edu/macbeth/full.html";
 		String document = url;
@@ -121,6 +121,9 @@ public class WordFrequencyFinder {
 				.forEachOrdered(x -> reverseSortedMap.put(x.getKey(), x.getValue()));
 
 		finalList = reverseSortedMap;
+		DatabaseConnection.createTable();
+		DatabaseConnection.deleteAllRows();
+		DatabaseConnection.insertAllRows(finalList);
 
 		// Print to text document
 //		int count = 1;
@@ -139,16 +142,6 @@ public class WordFrequencyFinder {
 //			System.out.println(count + ". (" + en.getKey() + ", " + en.getValue() + ")");
 //			count++;
 //		}
-	}
-
-	/**
-	 * This method is used to send the word list to the WordFrequencyTest class.
-	 * 
-	 * @return finalList sorted list with the frequency of words of the inputted
-	 *         file
-	 */
-	public LinkedHashMap<String, Integer> getWordList() {
-		return finalList;
 	}
 
 }

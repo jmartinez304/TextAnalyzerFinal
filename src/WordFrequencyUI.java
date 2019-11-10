@@ -14,6 +14,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import java.io.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.*;
 
 /**
@@ -77,7 +80,7 @@ public class WordFrequencyUI extends Application {
 				} else {
 					table.setItems(getWord(url));
 				}
-			} catch (IOException e1) {
+			} catch (Exception e1) {
 				e1.printStackTrace();
 				AlertBox.display("Invalid URL", "Please input a valid HTML URL");
 			}
@@ -122,23 +125,43 @@ public class WordFrequencyUI extends Application {
 	}
 
 	/**
-	 * This method gets the list of words from the WordFrequencyFinder class and
-	 * adds it to the observable list that will be displayed in the UI.
+	 * This method sends the URL to the WordFrequencyFinder class, and it retrieves
+	 * the list of words and their respective count from the database and gives that
+	 * data to the observable list that will be displayed in the UI.
 	 * 
 	 * @param urlLink HTML URL inputed by the user which the program will analyze.
 	 * @return words Observable list that will be displayed in the UI
-	 * @throws IOException if there is a problem with the URL
+	 * @throws Exception if there is a problem connecting to the database or running
+	 *                   the SQL
 	 */
-	public static ObservableList<Word> getWord(String urlLink) throws IOException {
+	public static ObservableList<Word> getWord(String urlLink) throws Exception {
 		ObservableList<Word> words = FXCollections.observableArrayList();
-		WordFrequencyFinder finder1 = new WordFrequencyFinder(urlLink);
-		importedList = finder1.getWordList();
+		new WordFrequencyFinder(urlLink);
 		int count = 1;
-		for (Map.Entry<String, Integer> en : importedList.entrySet()) {
-			words.add(new Word(count, en.getKey(), en.getValue()));
-			count++;
+		Connection con = null;
+		PreparedStatement statement = null;
+		ResultSet result = null;
+		try {
+			con = DatabaseConnection.getConnection();
+			statement = con.prepareStatement("Select * FROM word");
+			result = statement.executeQuery();
+			while (result.next()) {
+				words.add(new Word(count, result.getString("word"), result.getInt("word_count")));
+				count++;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (result != null) {
+				result.close();
+			}
+			if (statement != null) {
+				statement.close();
+			}
+			if (con != null) {
+				con.close();
+			}
 		}
-
 		return words;
 	}
 
