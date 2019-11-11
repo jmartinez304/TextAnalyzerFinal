@@ -1,7 +1,6 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -14,10 +13,6 @@ import java.util.Map;
 
 public class DatabaseConnection {
 
-	static Connection con = null;
-	static PreparedStatement statement = null;
-	static ResultSet result = null;
-
 	/**
 	 * This method deletes all rows of the database to accommodate the new entries
 	 * of words that are going to be placed in the database.
@@ -27,9 +22,13 @@ public class DatabaseConnection {
 	 */
 
 	public static void deleteAllRows() throws Exception {
+		
+		Connection con = null;
+		PreparedStatement statement = null;
+		
 		try {
 			con = getConnection();
-			PreparedStatement statement = con.prepareStatement("TRUNCATE TABLE word");
+			statement = con.prepareStatement("TRUNCATE TABLE word");
 			statement.executeUpdate();
 			System.out.println("Table has been cleared");
 		} catch (Exception e) {
@@ -58,8 +57,12 @@ public class DatabaseConnection {
 	 */
 
 	public static void insertAllRows(LinkedHashMap<String, Integer> finalList) throws Exception {
+		
+		Connection con = null;
+		PreparedStatement statement = null;
+		
 		try {
-			Connection con = getConnection();
+			con = getConnection();
 			String sql = "INSERT INTO word(word,word_count) " + "VALUES(?,?)";
 			statement = con.prepareStatement(sql);
 			for (Map.Entry<String, Integer> en : finalList.entrySet()) {
@@ -93,12 +96,16 @@ public class DatabaseConnection {
 	 */
 
 	public static void createTable() throws Exception {
+		
+		Connection con = null;
+		PreparedStatement statement = null;
+		
 		try {
-			Connection con = getConnection();
-			PreparedStatement create = con.prepareStatement("CREATE TABLE IF NOT EXISTS `wordoccurrences`.`word` (\r\n"
+			con = getConnection();
+			statement = con.prepareStatement("CREATE TABLE IF NOT EXISTS `wordoccurrences`.`word` (\r\n"
 					+ "  `word_id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,\r\n" + "  `word` VARCHAR(45) NOT NULL,\r\n"
 					+ "  `word_count` INT(10) UNSIGNED NOT NULL,\r\n" + "  PRIMARY KEY (`word_id`))");
-			create.executeUpdate();
+			statement.executeUpdate();
 
 		} catch (Exception e) {
 			System.out.println(e);
